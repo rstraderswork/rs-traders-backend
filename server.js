@@ -5,6 +5,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import authRoutes from './routes/auth.js'
 import productRoutes from './routes/products.js'
+import categoryRoutes from './routes/categories.js'
 import visitRoutes from './routes/visits.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -23,6 +24,7 @@ app.get('/api/health', (req, res) => {
 // Routes
 app.use('/api/auth', authRoutes)
 app.use('/api/products', productRoutes)
+app.use('/api/categories', categoryRoutes)
 app.use('/api/visits', visitRoutes)
 
 // Error handling

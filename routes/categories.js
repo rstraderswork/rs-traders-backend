@@ -4,25 +4,26 @@ import { authMiddleware } from '../middleware/auth.js'
 
 const router = express.Router()
 
-// Get all products
+// Get all categories
 router.get('/', async (req, res) => {
   try {
     const { data, error } = await supabase
-      .from('products')
+      .from('categories')
       .select('*')
+      .order('name', { ascending: true })
 
     if (error) throw error
-    res.json(data)
+    res.json(data || [])
   } catch (err) {
     res.status(500).json({ error: err.message })
   }
 })
 
-// Get product by ID
+// Get category by ID
 router.get('/:id', async (req, res) => {
   try {
     const { data, error } = await supabase
-      .from('products')
+      .from('categories')
       .select('*')
       .eq('id', req.params.id)
       .single()
@@ -34,20 +35,17 @@ router.get('/:id', async (req, res) => {
   }
 })
 
-// Create product (admin only)
+// Create category (admin only)
 router.post('/', authMiddleware, async (req, res) => {
   try {
-    const { name, category, description, fabric_type, size_range, image_urls } = req.body
+    const { name, description, image_url } = req.body
 
     const { data, error } = await supabase
-      .from('products')
+      .from('categories')
       .insert([{
         name,
-        category,
         description,
-        fabric_type,
-        size_range,
-        image_urls,
+        image_url,
         created_by: req.user.id
       }])
       .select()
@@ -59,20 +57,17 @@ router.post('/', authMiddleware, async (req, res) => {
   }
 })
 
-// Update product (admin only)
+// Update category (admin only)
 router.put('/:id', authMiddleware, async (req, res) => {
   try {
-    const { name, category, description, fabric_type, size_range, image_urls } = req.body
+    const { name, description, image_url } = req.body
 
     const { data, error } = await supabase
-      .from('products')
+      .from('categories')
       .update({
         name,
-        category,
         description,
-        fabric_type,
-        size_range,
-        image_urls,
+        image_url,
         updated_at: new Date().toISOString()
       })
       .eq('id', req.params.id)
@@ -85,16 +80,16 @@ router.put('/:id', authMiddleware, async (req, res) => {
   }
 })
 
-// Delete product (admin only)
+// Delete category (admin only)
 router.delete('/:id', authMiddleware, async (req, res) => {
   try {
     const { error } = await supabase
-      .from('products')
+      .from('categories')
       .delete()
       .eq('id', req.params.id)
 
     if (error) throw error
-    res.json({ message: 'Product deleted successfully' })
+    res.json({ message: 'Category deleted successfully' })
   } catch (err) {
     res.status(500).json({ error: err.message })
   }
