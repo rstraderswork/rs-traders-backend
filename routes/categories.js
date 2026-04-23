@@ -38,14 +38,14 @@ router.get('/:id', async (req, res) => {
 // Create category (admin only)
 router.post('/', authMiddleware, async (req, res) => {
   try {
-    const { name, description, image_url } = req.body
+    const { name, description, icon } = req.body
 
     const { data, error } = await supabase
       .from('categories')
       .insert([{
         name,
         description,
-        image_url,
+        icon,
         created_by: req.user.id
       }])
       .select()
@@ -60,14 +60,14 @@ router.post('/', authMiddleware, async (req, res) => {
 // Update category (admin only)
 router.put('/:id', authMiddleware, async (req, res) => {
   try {
-    const { name, description, image_url } = req.body
+    const { name, description, icon } = req.body
 
     const { data, error } = await supabase
       .from('categories')
       .update({
         name,
         description,
-        image_url,
+        icon,
         updated_at: new Date().toISOString()
       })
       .eq('id', req.params.id)
