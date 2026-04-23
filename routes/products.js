@@ -47,7 +47,7 @@ router.post('/', authMiddleware, async (req, res) => {
         description,
         fabric_type,
         size_range,
-        image_urls: image_urls ? [image_urls] : [],
+        image_urls: image_urls || [],
         is_featured: is_featured || false,
         created_by: req.user.id
       }])
@@ -73,7 +73,7 @@ router.put('/:id', authMiddleware, async (req, res) => {
         description,
         fabric_type,
         size_range,
-        image_urls: image_urls ? [image_urls] : [],
+        image_urls: image_urls || [],
         is_featured: is_featured || false,
         updated_at: new Date().toISOString()
       })
