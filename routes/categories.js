@@ -45,8 +45,7 @@ router.post('/', authMiddleware, async (req, res) => {
       .insert([{
         name,
         description,
-        icon,
-        created_by: req.user.id
+        icon
       }])
       .select()
 
