@@ -37,18 +37,18 @@ router.get('/:id', async (req, res) => {
 // Create product (admin only)
 router.post('/', authMiddleware, async (req, res) => {
   try {
-    const { name, category, description, fabric_type, size_range, image_urls } = req.body
+    const { name, category_id, description, fabric_type, size_range, image_url, is_featured } = req.body
 
     const { data, error } = await supabase
       .from('products')
       .insert([{
         name,
-        category,
+        category_id,
         description,
         fabric_type,
         size_range,
-        image_urls,
-        created_by: req.user.id
+        image_url,
+        is_featured: is_featured || false
       }])
       .select()
 
@@ -62,17 +62,18 @@ router.post('/', authMiddleware, async (req, res) => {
 // Update product (admin only)
 router.put('/:id', authMiddleware, async (req, res) => {
   try {
-    const { name, category, description, fabric_type, size_range, image_urls } = req.body
+    const { name, category_id, description, fabric_type, size_range, image_url, is_featured } = req.body
 
     const { data, error } = await supabase
       .from('products')
       .update({
         name,
-        category,
+        category_id,
         description,
         fabric_type,
         size_range,
-        image_urls,
+        image_url,
+        is_featured: is_featured || false,
         updated_at: new Date().toISOString()
       })
       .eq('id', req.params.id)
